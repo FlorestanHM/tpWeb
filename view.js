@@ -4,7 +4,7 @@ Rectangle.prototype.paint = function(ctx) {
     ctx.strokeStyle = this.color
     ctx.lineWidth = this.thickness
     ctx.beginPath();
-    ctx.rect(this.x, this.y, this.x + this.width,   this.y + this.heigth);
+    ctx.rect(this.x, this.y, this.width, this.heigth);
     ctx.stroke();
 };
 
