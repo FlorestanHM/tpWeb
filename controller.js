@@ -2,7 +2,7 @@
 var editingMode = { rect: 0, line: 1 };
 
 function Pencil(ctx, drawing, canvas) {
-	this.currEditingMode = editingMode.rect;
+	this.currEditingMode = editingMode.line;
 	this.currLineWidth = 5;
 	this.currColour = '#000000';
 	this.currentShape = 0;
@@ -19,6 +19,7 @@ function Pencil(ctx, drawing, canvas) {
 	function clearDrawing () {
 		drawing.shapeArray = []
 		drawing.paint(ctx, canvas)
+		drawing.updateShapeList()
 	}
 
 	new DnD(canvas, this);
@@ -30,12 +31,17 @@ function Pencil(ctx, drawing, canvas) {
 	}.bind(this)
 
 	this.onInteractionUpdate = function (dnd) {
-		if (this.currEditingMode === editingMode.rect) {
-			var heigth = dnd.endY - dnd.startY
-			var width = dnd.endX - dnd.startX
-			this.currentShape = new Rectangle(dnd.startX, dnd.startY, this.currColour, this.currLineWidth, heigth, width)
-		} else {
-			this.currentShape = new Line(dnd.startX, dnd.startY, this.currColour, this.currLineWidth, dnd.endX, dnd.endY)
+		switch(this.currEditingMode){
+			case editingMode.rect: {
+				var heigth = dnd.endY - dnd.startY
+				var width = dnd.endX - dnd.startX
+				this.currentShape = new Rectangle(dnd.startX, dnd.startY, this.currColour, this.currLineWidth, heigth, width)
+				break;
+			}
+			case editingMode.line: {
+				this.currentShape = new Line(dnd.startX, dnd.startY, this.currColour, this.currLineWidth, dnd.endX, dnd.endY)
+				break;
+			}
 		}
 		drawing.paint(ctx, canvas)
 		this.currentShape.paint(ctx)
@@ -45,6 +51,7 @@ function Pencil(ctx, drawing, canvas) {
 		drawing.shapeArray.push(this.currentShape)
 		this.currentShape.paint(ctx)
 		drawing.paint(ctx, canvas);
+		drawing.updateShapeList()
 	}.bind(this)
 };
 

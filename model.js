@@ -4,6 +4,11 @@
 
 function Drawing() {
     this.shapeArray = new Array()
+
+    this.removeShape = function (shapeId) {
+        this.shapeArray.splice(shapeId,1)
+        console.log(this.shapeArray)
+    }
 }
 
 function Shape(x, y, color, thickness) {
